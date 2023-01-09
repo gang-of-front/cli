@@ -1,14 +1,10 @@
 import { spawn, SpawnOptions } from 'child_process';
 import debug from 'debug';
-import { CustomActionFunction, NodePlopAPI } from 'plop';
 import { didSucceed } from '../utils/didSuccess';
 
 const log = debug('@gof/cli:actions:chmod');
 
-function chmodCommand(
-  _,
-  { verbose, path, command, files = [] },
-): Promise<CustomActionFunction> {
+function chmodCommand(_, { verbose, path, command, files = [] }) {
   const spawnOptions = verbose
     ? ({
         cwd: path,
@@ -41,7 +37,7 @@ function chmodCommand(
   });
 }
 
-export default function (plop: NodePlopAPI) {
+export default function (plop) {
   plop.setDefaultInclude({ actionTypes: true });
   plop.setActionType('chmod', chmodCommand);
 }

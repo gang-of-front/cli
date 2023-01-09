@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import { spawn, SpawnOptions } from 'child_process';
 import debug from 'debug';
 import { didSucceed } from '../utils/didSuccess.js';
 
@@ -6,17 +6,22 @@ const log = debug('@gof/cli:actions:git');
 
 function gitCommand(_, { verbose, path, command, params = [] }) {
   const spawnOptions = verbose
-    ? {
+    ? ({
         cwd: path,
         shell: true,
         stdio: 'inherit',
-      }
-    : {
+      } as SpawnOptions)
+    : ({
         cwd: path,
-      };
+      } as SpawnOptions);
 
   return new Promise((resolve, reject) => {
-    log('Running', ['git', ...command, ...params].join(' '), 'with options : ', spawnOptions);
+    log(
+      'Running',
+      ['git', ...command, ...params].join(' '),
+      'with options : ',
+      spawnOptions,
+    );
     console.log('Running', ['git', ...command].join(' '));
 
     const child = spawn('git', [...command, ...params], spawnOptions);

@@ -6,10 +6,20 @@ import { isDebug } from '../utils/isDebug.js';
 import { getLocalPath } from '../getLocalPath.js';
 import { NodePlopAPI } from 'plop';
 
-export default async function (plop: NodePlopAPI) {
+type Actions = {
+  template: string | undefined;
+  orgName: string | undefined;
+  projectName: string | undefined;
+};
+
+export default async function (plop) {
   const templatesChoices = fs.readdirSync(getLocalPath('./templates'));
 
-  await plop.load(['../actions/yarn.js', '../actions/git.js', '../actions/chmod.js']);
+  await plop.load([
+    '../actions/yarn.js',
+    '../actions/git.js',
+    '../actions/chmod.js',
+  ]);
 
   plop.setGenerator('create', {
     description: 'this is a MFE generator',
@@ -17,7 +27,8 @@ export default async function (plop: NodePlopAPI) {
       {
         type: 'input',
         name: 'orgName',
-        message: 'Organization name (can use letters, numbers, dash or underscore)',
+        message:
+          'Organization name (can use letters, numbers, dash or underscore)',
       },
       {
         type: 'input',
@@ -32,7 +43,7 @@ export default async function (plop: NodePlopAPI) {
         default: 'app-parcel',
       },
     ],
-    actions({ template, orgName, projectName }) {
+    actions({ template, orgName, projectName }: Actions) {
       const destPath = path.join(process.cwd(), `${orgName}-${projectName}`);
 
       const hasInstallDevDeps = devDependencies(template).length >= 1;
@@ -56,7 +67,7 @@ export default async function (plop: NodePlopAPI) {
           templateFile: `../templates/${template}/.npmignore`,
           abortOnFail: false,
           data: { orgName, projectName },
-		},
+        },
         {
           type: 'git',
           command: ['init'],
