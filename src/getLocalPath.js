@@ -4,7 +4,7 @@ import path, { dirname } from 'path';
 
 const log = debug('@creditas/cli:getLocalPath');
 
-const getLocalPath = (targetPath: string) => {
+const getLocalPath = (targetPath) => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   const localPath = path.join(__dirname, targetPath);
