@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs';
 
 export default async function (plop) {
@@ -42,14 +42,15 @@ export default async function (plop) {
       const distPath = path.join(process.cwd(), dist);
 
       const outputPath = path.join(
-        bucket,
+        'demo-gangoffront-com',
         environment,
         orgName,
         projectName,
         hash,
       );
 
-      const outputBucket = `s3://${outputPath}`.replace(/\/$/, '');
+      //const outputBucket = `https://5df477d4f9a8cf72185ef8f44fd1e144.r2.cloudflarestorage.com/${outputPath}`.replace(/\/$/, '');
+      const outputBucket = 's3://5df477d4f9a8cf72185ef8f44fd1e144.r2.cloudflarestorage.com';
 
       return [
         {
