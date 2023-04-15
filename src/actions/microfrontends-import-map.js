@@ -7,7 +7,7 @@ import {
 import fetch from 'node-fetch';
 import { diffString } from 'json-diff';
 
-const log = debug('@creditas/cli:actions:microfrontends-import-map');
+const log = debug('@gof/cli:actions:microfrontends-import-map');
 
 async function remoteFileExists(url) {
   const response = await fetch(url);

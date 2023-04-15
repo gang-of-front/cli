@@ -2,7 +2,7 @@ import debug from 'debug';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 
-const log = debug('@creditas/cli:getLocalPath');
+const log = debug('@gof/cli:getLocalPath');
 
 const getLocalPath = (targetPath) => {
   const __filename = fileURLToPath(import.meta.url);
