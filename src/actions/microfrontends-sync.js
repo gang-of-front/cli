@@ -3,7 +3,7 @@ import mime from 'mime-types';
 import { S3Client } from '@aws-sdk/client-s3';
 import S3SyncClient from 's3-sync-client';
 
-const log = debug('@creditas/cli:actions:microfrontends-sync');
+const log = debug('@gof/cli:actions:microfrontends-sync');
 
 async function microfrontendSyncCommand(
   _,
