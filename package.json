@@ -1,5 +1,5 @@
 {
-    "name": "@gof/cli",
+    "name": "@gang-of-front/cli",
     "version": "0.0.0-development",
     "type": "module",
     "main": "index.js",
