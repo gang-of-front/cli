@@ -1,5 +1,11 @@
 name: Publish
 
+permissions:
+  actions: write
+  id-token: write
+  contents: write
+  issues: read
+
 on: push
 
 jobs:
