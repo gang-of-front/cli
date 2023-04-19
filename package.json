@@ -1,6 +1,7 @@
 {
     "name": "@gang-of-front/cli",
     "version": "0.0.0-development",
+    "private": "false",
     "type": "module",
     "main": "index.js",
     "bin": "./bin/cli.js",
