@@ -25,6 +25,12 @@ export default async function (plop) {
         default: null,
       },
       {
+        type: 'input',
+        name: 's3Endpoint',
+        message: 's3Endpoint',
+        default: null,
+      },
+      {
         type: 'list',
         name: 'environment',
         message: 'What environment to update',
@@ -32,7 +38,7 @@ export default async function (plop) {
         choices: ['dev', 'stg', 'prod'],
       },
     ],
-    actions({ dist, hash, environment, bucket }) {
+    actions({ dist, hash, environment, bucket, s3Endpoint }) {
       const packJson = JSON.parse(
         fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf8'),
       );
@@ -42,26 +48,20 @@ export default async function (plop) {
       const distPath = path.join(process.cwd(), dist);
 
       const outputPath = path.join(
-        'demo-gangoffront-com',
+        'microfrontends',
         environment,
         orgName,
         projectName,
         hash,
       );
 
-      //const outputBucket = `https://5df477d4f9a8cf72185ef8f44fd1e144.r2.cloudflarestorage.com/${outputPath}`.replace(/\/$/, '');
-      const outputBucket = 's3://5df477d4f9a8cf72185ef8f44fd1e144.r2.cloudflarestorage.com';
-
       return [
         {
           type: 'microfrontends-sync',
           distPath,
-          outputBucket,
-          environment,
-          orgName,
-          projectName,
-          hash,
           bucket,
+          outputPath,
+          s3Endpoint
         },
       ];
     },
