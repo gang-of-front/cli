@@ -1,5 +1,8 @@
+import debug from 'debug';
 import path from 'path';
 import fs from 'fs';
+
+const log = debug('@gang-of-front/cli:generators:microfrontends-import-map');
 
 export default async function (plop) {
   await plop.load(['../actions/microfrontends-import-map.js']);
@@ -15,8 +18,20 @@ export default async function (plop) {
       {
         type: 'input',
         name: 'bucket',
-        message: 'bucket',
-        default: null,
+        message: 'bucket name',
+        default: undefined,
+      },
+      {
+        type: 'input',
+        name: 's3Endpoint',
+        message: 's3Endpoint',
+        default: undefined,
+      },
+      {
+        type: 'input',
+        name: 'domainBucket',
+        message: 'public domain of bucket',
+        default: 'https://assets.gangoffront.com',
       },
       {
         type: 'confirm',
@@ -28,11 +43,11 @@ export default async function (plop) {
         type: 'list',
         name: 'environment',
         message: 'What environment to update',
-        default: 'prd',
-        choices: ['dev', 'stg', 'prd'],
+        default: 'prod',
+        choices: ['dev', 'stg', 'prod'],
       },
     ],
-    actions({ hash, remoteVerify, environment, bucket }) {
+    actions({ hash, remoteVerify, environment, bucket, domainBucket, s3Endpoint }) {
       const packJson = JSON.parse(
         fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf8'),
       );
@@ -40,15 +55,21 @@ export default async function (plop) {
         .replace(/\@/g, '')
         .split('/');
 
+      log(
+        `orgName=${orgName}, projectName=${projectName}, package.json.name=${packJson.name}`,
+      );
+
       return [
         {
           type: 'microfrontends-import-map',
-          hash,
           remoteVerify,
+          bucket,
+          domainBucket,
+          s3Endpoint,
           environment,
           orgName,
           projectName,
-          bucket,
+          hash
         },
       ];
     },

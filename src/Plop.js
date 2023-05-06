@@ -3,7 +3,7 @@ import v8flags from 'v8flags';
 import interpret from 'interpret';
 
 const Plop = new Liftoff({
-  name: '@gof/cli',
+  name: '@gang-of-front/cli',
   // Remove this when this PR is merged:
   // https://github.com/gulpjs/interpret/pull/75
   extensions: { ...interpret.jsVariants, ['.cjs']: null },

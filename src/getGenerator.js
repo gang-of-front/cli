@@ -2,7 +2,7 @@ import debug from 'debug';
 import chalk from 'chalk';
 import { chooseGenerator } from './chooseGenerator.js';
 
-const log = debug('@gof/cli:getGenerator');
+const log = debug('@gang-of-front/cli:getGenerator');
 
 const getGenerator = async (plop, name) => {
   const generators = plop.getGeneratorList();
@@ -30,7 +30,7 @@ const getGenerator = async (plop, name) => {
       generator = plop.getGenerator(chooseCommand);
     }
   } catch (err) {
-    console.log(`${chalk.red('[@gof/cli ERROR]')} Command '${chalk.blue(name)}' not found!`);
+    console.log(`${chalk.red('[@gang-of-front/cli ERROR]')} Command '${chalk.blue(name)}' not found!`);
     process.exit(1);
   }
 

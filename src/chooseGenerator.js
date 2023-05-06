@@ -1,7 +1,7 @@
 import debug from 'debug';
 import nodePlop from 'node-plop';
 
-const log = debug('@gof/cli:chooseGenerator');
+const log = debug('@gang-of-front/cli:chooseGenerator');
 
 async function chooseGenerator(generators) {
   log({ generators });

@@ -4,30 +4,52 @@ import {
   GetObjectCommand,
   PutObjectCommand,
 } from '@aws-sdk/client-s3';
+import path from 'path';
 import fetch from 'node-fetch';
 import { diffString } from 'json-diff';
 
-const log = debug('@gof/cli:actions:microfrontends-import-map');
+const log = debug('@gang-of-front/cli:actions:microfrontends-import-map');
 
 async function remoteFileExists(url) {
   const response = await fetch(url);
-
   return response.status === 200;
 }
 
-async function getImportMapFile(environment, bucket, client) {
+async function downloadImportMap(environment, client, bucketName) {
   const getImportMapCommand = new GetObjectCommand({
-    Bucket: bucket,
+    Bucket: bucketName,
     Key: `microfrontends/${environment}/import-map.json`,
   });
 
-  const response = await client.send(getImportMapCommand);
-  log('Response of get import map object from s3', { response });
+  try {
+    const response = await client.send(getImportMapCommand);
+    log('Response of get import map object from s3', { response });
 
-  const importMapText = (await response?.Body?.transformToString()) ?? '';
-  log('Content of import-map.json', importMapText);
+    const importMapText = await response.Body.transformToString();
+    log('Content of import-map.json', importMapText);
 
-  return JSON.parse(importMapText);
+    return JSON.parse(importMapText);
+  } catch (error) {
+    if (error.Code !== 'NoSuchKey') throw new Error(error);
+    return { imports: {}, scopes: {} };
+  }
+}
+
+async function uploadImportMap(content, environment, client, bucketName) {
+  const updateImportmapCommand = new PutObjectCommand({
+    Bucket: bucketName,
+    Key: `microfrontends/${environment}/import-map.json`,
+    Body: JSON.stringify(content),
+    ContentType: 'application/importmap+json',
+    CacheControl: 'public, must-revalidate, max-age=0',
+    ACL: 'bucket-owner-full-control',
+  });
+
+  const result = await client.send(updateImportmapCommand);
+
+  log('import-map.json updated', result);
+
+  return result;
 }
 
 function addOrUpdateService(importMapJson, { service, url }) {
@@ -44,58 +66,49 @@ function addOrUpdateService(importMapJson, { service, url }) {
   return newImportMapJson;
 }
 
-async function updateImportMap(content, environment, bucket, client) {
-  const updateImportmapCommand = new PutObjectCommand({
-    Bucket: bucket,
-    Key: `microfrontends/${environment}/import-map.json`,
-    Body: JSON.stringify(content),
-    ContentType: 'application/importmap+json',
-    CacheControl: 'public, must-revalidate, max-age=0',
-    ACL: 'bucket-owner-full-control',
-  });
-
-  const result = await client.send(updateImportmapCommand);
-
-  log('import-map.json updated', result);
-
-  return result;
-}
-
 async function microfrontendImportMapCommand(
   _,
-  { environment, remoteVerify, orgName, projectName, hash, bucket },
+  {
+    remoteVerify,
+    bucket,
+    s3Endpoint,
+    domainBucket,
+    environment,
+    orgName,
+    projectName,
+    hash,
+  } = {},
 ) {
   const client = new S3Client({
-    region: 'us-east-1',
-    endpoint: bucket,
+    region: 'auto',
+    endpoint: s3Endpoint,
   });
 
-  const url = `https://assets.gangoffront.com/microfrontends/${environment}/${orgName}/${projectName}/${hash}/${orgName}-${projectName}.js`;
-
-  log(
-    `Running update import-map.json env=${environment} with service=${orgName}/${projectName} and url=${url}`,
+  const outputPath = path.join(
+    'microfrontends',
+    environment,
+    orgName,
+    projectName,
+    hash,
+    `${orgName}-${projectName}.js`,
   );
 
-  if (remoteVerify && !(await remoteFileExists(url))) {
-    throw new Error(`File not found! ${url}`);
+  const serviceUrl = path.join(domainBucket, outputPath);
+
+  if (remoteVerify && remoteFileExists(serviceUrl)) {
+    throw new Error(`File not found! ${serviceUrl}`);
   }
 
-  const importMapJson = await getImportMapFile(environment, bucket, client);
+  const importMapJson = await downloadImportMap(environment, client, bucket);
 
   const newImportMapJson = addOrUpdateService(importMapJson, {
     service: `@${orgName}/${projectName}`,
-    url,
+    url: serviceUrl,
   });
 
   console.log(diffString(importMapJson, newImportMapJson));
 
-  await updateImportMap(newImportMapJson, environment, bucket, client);
-
-  console.log('\n');
-  console.log(`${environment} import-map.json updated!`);
-  console.log(
-    `https://assets.gangoffront.com/microfrontends/${environment}/import-map.json`,
-  );
+  await uploadImportMap(newImportMapJson, environment, client, bucket);
 }
 
 export default function (plop) {

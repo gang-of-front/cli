@@ -1,7 +1,7 @@
 import debug from 'debug';
 import { progressSpinner } from './spinner.js';
 
-const log = debug('@gof/cli:runGenerator');
+const log = debug('@gang-of-front/cli:runGenerator');
 
 const runGenerator = async ({ runPrompts, runActions }, byPassArr) => {
   let failedActions = false;
