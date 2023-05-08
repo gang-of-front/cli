@@ -4,7 +4,7 @@ function loggerCommand(_, { message, raw = false }) {
   if (raw) {
     console.log(message);
   } else {
-    console.log(`${chalk.green('[@creditas/cli LOGGER]')}`);
+    console.log(`${chalk.green('[@gang-of-front/cli LOGGER]')}`);
     console.log(`${chalk.green(message)}`);
   }
 }
