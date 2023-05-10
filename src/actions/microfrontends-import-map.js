@@ -93,7 +93,7 @@ async function microfrontendImportMapCommand(
     `${orgName}-${projectName}.js`,
   );
 
-  const serviceUrl = path.join(domainBucket, outputPath);
+  const serviceUrl = new URL(outputPath, domainBucket).toString();
 
   if (remoteVerify && remoteFileExists(serviceUrl)) {
     throw new Error(`File not found! ${serviceUrl}`);
