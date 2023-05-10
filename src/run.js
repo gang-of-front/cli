@@ -6,7 +6,7 @@ import { getByPassArr } from './getByPassArr.js';
 import { runGenerator } from './runGenerator.js';
 import { getLocalPath } from './getLocalPath.js';
 
-const log = debug('@gof/cli:main');
+const log = debug('@gang-of-front/cli:main');
 
 async function run(env, _, passArgsBeforeDashes) {
   const args = _.slice(2);
