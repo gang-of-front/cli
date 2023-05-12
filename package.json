@@ -8,7 +8,7 @@
     "type": "module",
     "main": "index.js",
     "bin": {
-      "gof-cli": "./bin/cli.js"
+        "gof-cli": "./bin/cli.js"
     },
     "scripts": {
         "test": "echo Tests not implemented!!!",
@@ -16,29 +16,28 @@
     },
     "sideEffects": false,
     "dependencies": {
-        "@auth0/s3": "^1.0.0",
-        "@aws-sdk/client-s3": "^3.328.0",
-        "aws-sdk": "^2.1361.0",
-        "chalk": "^5.2.0",
-        "debug": "^4.3.4",
-        "interpret": "^3.1.1",
-        "json-diff": "^1.0.3",
-        "liftoff": "^4.0.0",
-        "mime-types": "^2.1.35",
-        "node-fetch": "^3.3.1",
-        "plop": "^3.1.1",
-        "s3-sync-client": "^3.0.3",
-        "v8flags": "^4.0.0"
+        "@auth0/s3": "1.0.0",
+        "@aws-sdk/abort-controller": "3.329.0",
+        "@aws-sdk/client-s3": "3.332.0",
+        "aws-sdk": "2.1377.0",
+        "chalk": "5.2.0",
+        "debug": "4.3.4",
+        "interpret": "3.1.1",
+        "json-diff": "1.0.4",
+        "liftoff": "4.0.0",
+        "mime-types": "2.1.35",
+        "node-fetch": "3.3.1",
+        "plop": "3.1.2",
+        "s3-sync-client": "3.0.3",
+        "v8flags": "4.0.0"
     },
     "devDependencies": {
-        "@types/debug": "^4.1.7",
-        "@types/interpret": "^1.1.1",
-        "@types/json-diff": "^0.9.1",
-        "@types/mime-types": "^2.1.1",
-        "@types/v8flags": "^3.1.1",
-        "prettier": "^2.8.2",
-        "semantic-release": "^20.0.2",
-        "ts-node": "^10.9.1",
-        "tsup": "^6.7.0"
+        "@types/debug": "4.1.7",
+        "@types/interpret": "1.1.1",
+        "@types/json-diff": "0.9.1",
+        "@types/mime-types": "2.1.1",
+        "@types/v8flags": "3.1.1",
+        "prettier": "2.8.8",
+        "semantic-release": "21.0.2"
     }
 }
