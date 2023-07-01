@@ -145,3 +145,4 @@ dist
 test-cli/
 !.gitignore
 # End of https://www.toptal.com/developers/gitignore/api/node
+.direnv
